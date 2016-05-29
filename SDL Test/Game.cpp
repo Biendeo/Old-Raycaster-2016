@@ -45,42 +45,34 @@ int Game::Run() {
 void Game::Render() {
 	SDL_RenderClear(renderer);
 
-	for (int x = 0; x < WINDOW_WIDTH; x++) {
-		for (int y = 0; y < WINDOW_HEIGHT; y++) {
+	// += 4 is here for 4x magnification.
+	for (int x = 0; x < WINDOW_WIDTH; x += 4) {
+		for (int y = 0; y < WINDOW_HEIGHT; y += 4) {
 			Uint32 foundColor = SpotPixel(x, y);
 			Uint8 r = foundColor / (256 * 256 * 256);
 			Uint8 g = foundColor / (256 * 256);
 			Uint8 b = foundColor / (256);
 			Uint8 a = foundColor;
 			SDL_SetRenderDrawColor(renderer, r, g, b, a);
+			// When rendering speeds up, reduce this magnification.
 			SDL_RenderDrawPoint(renderer, x, y);
+			SDL_RenderDrawPoint(renderer, x + 1, y);
+			SDL_RenderDrawPoint(renderer, x + 2, y);
+			SDL_RenderDrawPoint(renderer, x + 3, y);
+			SDL_RenderDrawPoint(renderer, x, y + 1);
+			SDL_RenderDrawPoint(renderer, x + 1, y + 1);
+			SDL_RenderDrawPoint(renderer, x + 2, y + 1);
+			SDL_RenderDrawPoint(renderer, x + 3, y + 1);
+			SDL_RenderDrawPoint(renderer, x, y + 2);
+			SDL_RenderDrawPoint(renderer, x + 1, y + 2);
+			SDL_RenderDrawPoint(renderer, x + 2, y + 2);
+			SDL_RenderDrawPoint(renderer, x + 3, y + 2);
+			SDL_RenderDrawPoint(renderer, x, y + 3);
+			SDL_RenderDrawPoint(renderer, x + 1, y + 3);
+			SDL_RenderDrawPoint(renderer, x + 2, y + 3);
+			SDL_RenderDrawPoint(renderer, x + 3, y + 3);
 		}
 	}
-
-	/*
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
-	SDL_Rect rectangleBackground;
-	rectangleBackground.x = 0;
-	rectangleBackground.y = 0;
-	rectangleBackground.w = WINDOW_WIDTH;
-	rectangleBackground.h = WINDOW_HEIGHT;
-
-	SDL_RenderFillRect(renderer, &rectangleBackground);
-
-	SDL_SetRenderDrawColor(renderer, 255, 50, 0, SDL_ALPHA_OPAQUE);
-
-	SDL_Rect rectangleForeground;
-	rectangleForeground.x = 100;
-	rectangleForeground.y = 100;
-	rectangleForeground.w = 100;
-	rectangleForeground.h = 100;
-
-	SDL_RenderFillRect(renderer, &rectangleForeground);
-
-	SDL_RenderDrawPoint(renderer, 300, 300);
-	*/
 
 	SDL_RenderPresent(renderer);
 
