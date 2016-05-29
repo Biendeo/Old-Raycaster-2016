@@ -15,7 +15,7 @@ Game::Game(SDL_Window *window, SDL_Renderer *renderer) {
 	this->renderer = renderer;
 	player = new Player();
 	map = new Map();
-	int refreshRate = 20;
+	int refreshRate = 144;
 	timer = new Timer(1000000 / refreshRate);
 	exiting = false;
 }
@@ -45,40 +45,81 @@ int Game::Run() {
 void Game::Render() {
 	SDL_RenderClear(renderer);
 
-	// += 4 is here for 4x magnification.
-	for (int x = 0; x < WINDOW_WIDTH; x += 4) {
-		for (int y = 0; y < WINDOW_HEIGHT; y += 4) {
-			Uint32 foundColor = SpotPixel(x, y);
-			Uint8 r = foundColor / (256 * 256 * 256);
-			Uint8 g = foundColor / (256 * 256);
-			Uint8 b = foundColor / (256);
-			Uint8 a = foundColor;
-			SDL_SetRenderDrawColor(renderer, r, g, b, a);
-			// When rendering speeds up, reduce this magnification.
-			SDL_RenderDrawPoint(renderer, x, y);
-			SDL_RenderDrawPoint(renderer, x + 1, y);
-			SDL_RenderDrawPoint(renderer, x + 2, y);
-			SDL_RenderDrawPoint(renderer, x + 3, y);
-			SDL_RenderDrawPoint(renderer, x, y + 1);
-			SDL_RenderDrawPoint(renderer, x + 1, y + 1);
-			SDL_RenderDrawPoint(renderer, x + 2, y + 1);
-			SDL_RenderDrawPoint(renderer, x + 3, y + 1);
-			SDL_RenderDrawPoint(renderer, x, y + 2);
-			SDL_RenderDrawPoint(renderer, x + 1, y + 2);
-			SDL_RenderDrawPoint(renderer, x + 2, y + 2);
-			SDL_RenderDrawPoint(renderer, x + 3, y + 2);
-			SDL_RenderDrawPoint(renderer, x, y + 3);
-			SDL_RenderDrawPoint(renderer, x + 1, y + 3);
-			SDL_RenderDrawPoint(renderer, x + 2, y + 3);
-			SDL_RenderDrawPoint(renderer, x + 3, y + 3);
+	for (int x = 0; x < WINDOW_WIDTH; x++) {
+		Uint32 foundColor;
+		double distance;
+		SDL_Rect rect = SpotVerticalRay(x, foundColor, distance);
+		if (rect.h < WINDOW_HEIGHT) {
+			SDL_Rect topRect;
+			topRect.x = rect.x;
+			topRect.y = 0;
+			topRect.w = 1;
+			topRect.h = rect.y;
+			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+			SDL_RenderDrawRect(renderer, &topRect);
+			SDL_Rect bottomRect;
+			bottomRect.x = rect.x;
+			bottomRect.y = rect.y + rect.h;
+			bottomRect.w = 1;
+			bottomRect.h = WINDOW_HEIGHT - bottomRect.y;
+			SDL_RenderDrawRect(renderer, &bottomRect);
 		}
+		Uint8 r = foundColor / (256 * 256 * 256);
+		Uint8 g = foundColor / (256 * 256);
+		Uint8 b = foundColor / (256);
+		Uint8 a = foundColor;
+		SDL_SetRenderDrawColor(renderer, r, g, b, a);
+		SDL_RenderDrawRect(renderer, &rect);
 	}
 
 	SDL_RenderPresent(renderer);
-
-	std::cout << "Drawn" << std::endl;
 }
 
+SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance) {
+	distance = 0;
+	const double updateInterval = 0.2;
+	const double drawDistance = 6;
+
+	foundColor = 0x00000000;
+
+	double x = player->GetX();
+	double y = player->GetY();
+
+	double deltaX = sin((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
+	double deltaY = cos((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
+
+	while (distance < drawDistance && foundColor == 0x00000000) {
+		foundColor = map->GetBlockColor(x, y);
+
+		distance += updateInterval;
+		x += deltaX;
+		y += deltaY;
+	}
+
+	double heightAngle = atan(1 / distance) * 180 / PI;
+	double screenHeightAngle = ((double)WINDOW_HEIGHT / WINDOW_WIDTH * player->GetFOV());
+	int screenY;
+	if (heightAngle >= screenHeightAngle || foundColor == 0x00000000) {
+		screenY = 0;
+		if (foundColor == 0x00000000) {
+			foundColor = 0x000000FF;
+		}
+	} else {
+		screenY = (screenHeightAngle - heightAngle) / screenHeightAngle * WINDOW_HEIGHT / 2;
+	}
+
+	SDL_Rect rect;
+	rect.x = pixelX;
+	rect.y = screenY;
+	rect.w = 1;
+	rect.h = WINDOW_HEIGHT - 2 * rect.y;
+
+	return rect;
+}
+
+/**
+*  \deprecated {Too slow, use SpotVerticalRay instead.}
+*/
 Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 	double trail = 0;
 	const double updateInterval = 0.2;
