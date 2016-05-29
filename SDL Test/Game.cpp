@@ -15,7 +15,7 @@ Game::Game(SDL_Window *window, SDL_Renderer *renderer) {
 	this->renderer = renderer;
 	player = new Player();
 	map = new Map();
-	int refreshRate = 10;
+	int refreshRate = 20;
 	timer = new Timer(1000000 / refreshRate);
 	exiting = false;
 }
@@ -90,7 +90,7 @@ void Game::Render() {
 Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 	double trail = 0;
 	const double updateInterval = 0.2;
-	const double drawDistance = 20;
+	const double drawDistance = 6;
 
 	Uint32 foundColor = 0x00000000;
 
@@ -100,7 +100,7 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 
 	double deltaX = sin((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
 	double deltaY = cos((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
-	double deltaZ = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH);
+	double deltaZ = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH * player->GetFOV()) * updateInterval;
 
 	while (trail < drawDistance && foundColor == 0x00000000 && z > -1 && z <= 1) {
 		foundColor = map->GetBlockColor(x, y);
@@ -111,9 +111,7 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 		z += deltaZ;
 	}
 
-	if (foundColor != 0x00000000) {
-		std::cout << foundColor << std::endl;
-	} else {
+	if (foundColor == 0x00000000) {
 		foundColor = 0x000000FF;
 	}
 
