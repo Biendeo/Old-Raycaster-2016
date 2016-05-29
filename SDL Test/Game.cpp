@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "Game.h"
 #include "Map.h"
+#include "Math.h"
 #include "Player.h"
 #include "Timer.h"
 
@@ -82,21 +83,21 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 
 	foundColor = 0x00000000;
 
-	double x = player->GetX();
-	double y = player->GetY();
+	Math::Vector2 pos = Math::Vector2(player->GetX(), player->GetY());
 
-	double deltaX = sin((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
-	double deltaY = cos((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
+	Math::Vector2 delta = Math::Vector2(0, 0);
+
+	delta.x = (sin(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
+	delta.y = (cos(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
 
 	while (distance < drawDistance && foundColor == 0x00000000) {
-		foundColor = map->GetBlockColor(x, y);
+		foundColor = map->GetBlockColor(pos.x, pos.y);
 
 		distance += updateInterval;
-		x += deltaX;
-		y += deltaY;
+		pos += delta;
 	}
 
-	double heightAngle = atan(1 / distance) * 180 / PI;
+	double heightAngle = Math::RadToDeg(atan(1 / distance));
 	double screenHeightAngle = ((double)WINDOW_HEIGHT / WINDOW_WIDTH * player->GetFOV());
 	int screenY;
 	if (heightAngle >= screenHeightAngle || foundColor == 0x00000000) {
@@ -105,7 +106,7 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 			foundColor = 0x000000FF;
 		}
 	} else {
-		screenY = (screenHeightAngle - heightAngle) / screenHeightAngle * WINDOW_HEIGHT / 2;
+		screenY = (int)((screenHeightAngle - heightAngle) / screenHeightAngle * WINDOW_HEIGHT / 2);
 	}
 
 	SDL_Rect rect;
@@ -127,21 +128,19 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 
 	Uint32 foundColor = 0x00000000;
 
-	double x = player->GetX();
-	double y = player->GetY();
-	double z = 0;
+	Math::Vector3 pos = Math::Vector3(player->GetX(), player->GetY(), 0);
 
-	double deltaX = sin((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
-	double deltaY = cos((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())) * PI / 180) * updateInterval;
-	double deltaZ = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH * player->GetFOV()) * updateInterval;
+	Math::Vector3 delta = Math::Vector3(0, 0, 0);
 
-	while (trail < drawDistance && foundColor == 0x00000000 && z > -1 && z <= 1) {
-		foundColor = map->GetBlockColor(x, y);
+	delta.x = sin(Math::DegToRad((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
+	delta.y = cos(Math::DegToRad((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
+	delta.z = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH * player->GetFOV()) * updateInterval;
+
+	while (trail < drawDistance && foundColor == 0x00000000 && pos.z > -1 && pos.z <= 1) {
+		foundColor = map->GetBlockColor(pos.x, pos.y);
 
 		trail += updateInterval;
-		x += deltaX;
-		y += deltaY;
-		z += deltaZ;
+		pos += delta;
 	}
 
 	if (foundColor == 0x00000000) {

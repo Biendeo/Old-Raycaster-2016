@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "Constants.h"
+#include "Math.h"
 #include "Player.h"
 
 
@@ -43,23 +44,23 @@ double Player::GetTurnSpeed() {
 }
 
 void Player::MoveForward() {
-	x += sin(rotation * PI / 180) * moveSpeed;
-	y += cos(rotation * PI / 180) * moveSpeed;
+	x += sin(Math::DegToRad(rotation)) * moveSpeed;
+	y += cos(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveLeft() {
-	x -= cos(rotation * PI / 180) * moveSpeed;
-	y += sin(rotation * PI / 180) * moveSpeed;
+	x -= cos(Math::DegToRad(rotation)) * moveSpeed;
+	y += sin(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveRight() {
-	x += cos(rotation * PI / 180) * moveSpeed;
-	y -= sin(rotation * PI / 180) * moveSpeed;
+	x += cos(Math::DegToRad(rotation)) * moveSpeed;
+	y -= sin(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveBack() {
-	x -= sin(rotation * PI / 180) * moveSpeed;
-	y -= cos(rotation * PI / 180) * moveSpeed;
+	x -= sin(Math::DegToRad(rotation)) * moveSpeed;
+	y -= cos(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::TurnLeft() {
