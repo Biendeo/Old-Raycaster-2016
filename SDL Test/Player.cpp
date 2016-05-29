@@ -7,8 +7,7 @@
 
 
 Player::Player() {
-	x = 0;
-	y = 0;
+	pos = Math::Vector2(0, 0);
 	rotation = 0;
 	fov = 90;
 	moveSpeed = 0.05;
@@ -20,11 +19,15 @@ Player::~Player() {
 }
 
 double Player::GetX() {
-	return x;
+	return pos.x;
 }
 
 double Player::GetY() {
-	return y;
+	return pos.y;
+}
+
+Math::Vector2 Player::GetPos() {
+	return pos;
 }
 
 double Player::GetRotation() {
@@ -44,23 +47,23 @@ double Player::GetTurnSpeed() {
 }
 
 void Player::MoveForward() {
-	x += sin(Math::DegToRad(rotation)) * moveSpeed;
-	y += cos(Math::DegToRad(rotation)) * moveSpeed;
+	pos.x += sin(Math::DegToRad(rotation)) * moveSpeed;
+	pos.y += cos(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveLeft() {
-	x -= cos(Math::DegToRad(rotation)) * moveSpeed;
-	y += sin(Math::DegToRad(rotation)) * moveSpeed;
+	pos.x -= cos(Math::DegToRad(rotation)) * moveSpeed;
+	pos.y += sin(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveRight() {
-	x += cos(Math::DegToRad(rotation)) * moveSpeed;
-	y -= sin(Math::DegToRad(rotation)) * moveSpeed;
+	pos.x += cos(Math::DegToRad(rotation)) * moveSpeed;
+	pos.y -= sin(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::MoveBack() {
-	x -= sin(Math::DegToRad(rotation)) * moveSpeed;
-	y -= cos(Math::DegToRad(rotation)) * moveSpeed;
+	pos.x -= sin(Math::DegToRad(rotation)) * moveSpeed;
+	pos.y -= cos(Math::DegToRad(rotation)) * moveSpeed;
 }
 
 void Player::TurnLeft() {

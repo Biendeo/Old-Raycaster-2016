@@ -5,6 +5,7 @@ class Player {
 	~Player();
 	double GetX();
 	double GetY();
+	Math::Vector2 GetPos();
 	double GetRotation();
 	double GetFOV();
 	double GetMoveSpeed();
@@ -18,8 +19,7 @@ class Player {
 	void TurnRight();
 
 	private:
-	double x;
-	double y;
+	Math::Vector2 pos;
 	double rotation;
 	double fov;
 	double moveSpeed;

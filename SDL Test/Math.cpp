@@ -5,6 +5,10 @@
 
 
 namespace Math {
+	Vector2::Vector2() : Vector2(0, 0) {
+
+	}
+
 	Vector2::Vector2(double x, double y) {
 		this->x = x;
 		this->y = y;
@@ -43,6 +47,10 @@ namespace Math {
 		return atan(y / x);
 	}
 
+
+	Vector3::Vector3() : Vector3(0, 0, 0) {
+
+	}
 
 	Vector3::Vector3(double x, double y, double z) {
 		this->x = x;

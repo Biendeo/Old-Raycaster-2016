@@ -83,7 +83,7 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 
 	foundColor = 0x00000000;
 
-	Math::Vector2 pos = Math::Vector2(player->GetX(), player->GetY());
+	Math::Vector2 pos = player->GetPos();
 
 	Math::Vector2 delta = Math::Vector2(0, 0);
 
