@@ -120,4 +120,39 @@ namespace Math {
 	double DegToRad(double degrees) {
 		return degrees * PI / 180;
 	}
+	Vector2 RayToNextGrid(Vector2 origin, Vector2 delta) {
+		bool goingForX;
+		double nextX = NextGrid(origin.x, delta.x);
+		double nextY = NextGrid(origin.y, delta.y);
+		double timeToNextX = (nextX - origin.x) / delta.x;
+		double timeToNextY = (nextY - origin.y) / delta.y;
+		if (delta.x == 0 && delta.y == 0) {
+			return origin;
+		} else {
+			if (timeToNextX < timeToNextY) {
+				goingForX = true;
+			} else {
+				goingForX = false;
+			}
+
+			if (goingForX) {
+				origin.y += timeToNextX * delta.y;
+				origin.x = nextX;
+			} else {
+				origin.x += timeToNextY * delta.x;
+				origin.y = nextY;
+			}
+			return origin;
+		}
+	}
+
+	double NextGrid(double p, double delta) {
+		if (delta > 0) {
+			return floor(p + 1);
+		} else if (delta < 0) {
+			return ceil(p - 1);
+		} else {
+			return p;
+		}
+	}
 }

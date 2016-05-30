@@ -78,23 +78,35 @@ void Game::Render() {
 
 SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance) {
 	distance = 0;
-	const double updateInterval = 0.2;
 	const double drawDistance = 6;
-
-	foundColor = 0x00000000;
 
 	Math::Vector2 pos = player->GetPos();
 
+	foundColor = map->GetBlockColor(pos.x, pos.y);
+
 	Math::Vector2 delta = Math::Vector2(0, 0);
 
-	delta.x = (sin(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
-	delta.y = (cos(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
+	delta.x = (sin(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV()))));
+	delta.y = (cos(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV()))));
 
 	while (distance < drawDistance && foundColor == 0x00000000) {
-		foundColor = map->GetBlockColor(pos.x, pos.y);
+		pos = Math::RayToNextGrid(pos, delta);
 
-		distance += updateInterval;
-		pos += delta;
+		distance = (pos - player->GetPos()).Modulus();
+
+		Math::Vector2 searchPos = pos;
+		if (delta.x < 0) {
+			searchPos.x = ceil(searchPos.x) - 0.5;
+		} else if (delta.x > 0) {
+			searchPos.x = floor(searchPos.x) + 0.5;
+		}
+		if (delta.y < 0) {
+			searchPos.y = ceil(searchPos.y) - 0.5;
+		} else if (delta.y > 0) {
+			searchPos.y = floor(searchPos.y) + 0.5;
+		}
+		foundColor = map->GetBlockColor(searchPos.x, searchPos.y);
+
 	}
 
 	double heightAngle = Math::RadToDeg(atan(1 / distance));

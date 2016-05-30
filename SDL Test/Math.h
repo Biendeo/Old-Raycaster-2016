@@ -50,4 +50,7 @@ namespace Math {
 
 	double RadToDeg(double radians);
 	double DegToRad(double degrees);
+
+	Vector2 RayToNextGrid(Vector2 origin, Vector2 delta);
+	double NextGrid(double p, double delta);
 }
