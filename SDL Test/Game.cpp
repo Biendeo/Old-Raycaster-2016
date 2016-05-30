@@ -82,7 +82,7 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 
 	Math::Vector2 pos = player->GetPos();
 
-	foundColor = map->GetBlockColor(pos.x, pos.y);
+	foundColor = map->GetBlockColor(pos);
 
 	Math::Vector2 delta = Math::Vector2(0, 0);
 
@@ -105,7 +105,7 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 		} else if (delta.y > 0) {
 			searchPos.y = floor(searchPos.y) + 0.5;
 		}
-		foundColor = map->GetBlockColor(searchPos.x, searchPos.y);
+		foundColor = map->GetBlockColor(searchPos);
 
 	}
 
@@ -149,7 +149,7 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 	delta.z = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH * player->GetFOV()) * updateInterval;
 
 	while (trail < drawDistance && foundColor == 0x00000000 && pos.z > -1 && pos.z <= 1) {
-		foundColor = map->GetBlockColor(pos.x, pos.y);
+		foundColor = map->GetBlockColor(Math::Vector2(pos.x, pos.y));
 
 		trail += updateInterval;
 		pos += delta;
@@ -170,15 +170,27 @@ void Game::HandleInput() {
 	}
 	if (state[SDL_SCANCODE_W]) {
 		player->MoveForward();
+		if (map->InWall(player->GetPos())) {
+			player->MoveBack();
+		}
 	}
 	if (state[SDL_SCANCODE_A]) {
 		player->MoveLeft();
+		if (map->InWall(player->GetPos())) {
+			player->MoveRight();
+		}
 	}
 	if (state[SDL_SCANCODE_S]) {
 		player->MoveBack();
+		if (map->InWall(player->GetPos())) {
+			player->MoveForward();
+		}
 	}
 	if (state[SDL_SCANCODE_D]) {
 		player->MoveRight();
+		if (map->InWall(player->GetPos())) {
+			player->MoveLeft();
+		}
 	}
 	if (state[SDL_SCANCODE_LEFT]) {
 		player->TurnLeft();

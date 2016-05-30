@@ -1,5 +1,5 @@
 #include "Map.h"
-
+#include "Math.h"
 
 
 Map::Map() {
@@ -14,11 +14,19 @@ Map::Map() {
 Map::~Map() {
 }
 
-Uint32 Map::GetBlockColor(double x, double y) {
+Uint32 Map::GetBlockColor(Math::Vector2 v) {
 	for (WallBlock &wb : walls) {
-		if (x >= wb.GetX() && x - 1 < wb.GetX() && y >= wb.GetY() && y - 1 < wb.GetY()) {
+		if (v.x >= wb.GetX() && v.x - 1 < wb.GetX() && v.y >= wb.GetY() && v.y - 1 < wb.GetY()) {
 			return wb.GetColor();
 		}
 	}
 	return NULL;
+}
+
+bool Map::InWall(Math::Vector2 v) {
+	if (GetBlockColor(v) == NULL) {
+		return false;
+	} else {
+		return true;
+	}
 }
