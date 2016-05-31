@@ -25,6 +25,8 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	Game g(window, renderer);
 
 	g.Run();

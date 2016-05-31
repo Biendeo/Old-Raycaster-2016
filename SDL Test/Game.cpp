@@ -7,7 +7,9 @@
 #include "Player.h"
 #include "Timer.h"
 
+#include <cmath>
 #include <iostream>
+#include <string>
 
 
 
@@ -16,7 +18,7 @@ Game::Game(SDL_Window *window, SDL_Renderer *renderer) {
 	this->renderer = renderer;
 	player = new Player();
 	map = new Map();
-	int refreshRate = 144;
+	int refreshRate = 30;
 	timer = new Timer(1000000 / refreshRate);
 	exiting = false;
 }
@@ -72,6 +74,8 @@ void Game::Render() {
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 		SDL_RenderDrawRect(renderer, &rect);
 	}
+
+	SDL_SetWindowTitle(window, ("(" + std::to_string(player->GetX()) + ", " + std::to_string(player->GetY()) + ", " + std::to_string(player->GetRotation()) +  ")").c_str());
 
 	SDL_RenderPresent(renderer);
 }
@@ -197,5 +201,22 @@ void Game::HandleInput() {
 	}
 	if (state[SDL_SCANCODE_RIGHT]) {
 		player->TurnRight();
+	}
+
+	int mouseX;
+	int mouseY;
+	SDL_GetMouseState(&mouseX, &mouseY);
+	int mouseDeltaX;
+	int mouseDeltaY;
+	SDL_GetRelativeMouseState(&mouseDeltaX, &mouseDeltaY);
+
+	int mouseSensitivity = 100 / 5;
+
+	for (int i = 0; i < mouseDeltaX; i += mouseSensitivity) {
+		player->TurnRight();
+	}
+
+	for (int i = 0; i > mouseDeltaX; i -= mouseSensitivity) {
+		player->TurnLeft();
 	}
 }
