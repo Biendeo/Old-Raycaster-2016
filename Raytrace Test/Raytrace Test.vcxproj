@@ -73,26 +73,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)SDL\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)SDL\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)SDL\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)SDL\include</IncludePath>
-    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -109,7 +109,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);SDL2.lib;SDL2main.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)SDL\lib\x86\SDL2.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\SDL2.dll"</Command>
+      <Command>copy "$(SolutionDir)SDL\lib\x86\SDL2.dll" "$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\SDL2.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying the SDL2.dll</Message>
@@ -130,7 +130,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);SDL2.lib;SDL2main.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)SDL\lib\x64\SDL2.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\SDL2.dll"</Command>
+      <Command>copy "$(SolutionDir)SDL\lib\x64\SDL2.dll" "$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\SDL2.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying the SDL2.dll</Message>
@@ -155,7 +155,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);SDL2.lib;SDL2main.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)SDL\lib\x86\SDL2.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\SDL2.dll"</Command>
+      <Command>copy "$(SolutionDir)SDL\lib\x86\SDL2.dll" "$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\SDL2.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying the SDL2.dll</Message>
@@ -180,7 +180,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);SDL2.lib;SDL2main.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(SolutionDir)SDL\lib\x64\SDL2.dll" "$(SolutionDir)bin\$(Platform)\$(Configuration)\SDL2.dll"</Command>
+      <Command>copy "$(SolutionDir)SDL\lib\x64\SDL2.dll" "$(SolutionDir)bin\$(PlatformTarget)\$(Configuration)\SDL2.dll"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copying the SDL2.dll</Message>
