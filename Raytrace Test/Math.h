@@ -53,4 +53,6 @@ namespace Math {
 
 	Vector2 RayToNextGrid(Vector2 origin, Vector2 delta);
 	double NextGrid(double p, double delta);
+
+	bool Epsilon(double d);
 }

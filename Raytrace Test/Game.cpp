@@ -51,7 +51,8 @@ void Game::Render() {
 	for (int x = 0; x < WINDOW_WIDTH; x++) {
 		Uint32 foundColor;
 		double distance;
-		SDL_Rect rect = SpotVerticalRay(x, foundColor, distance);
+		double angle;
+		SDL_Rect rect = SpotVerticalRay(x, foundColor, distance, angle);
 		if (rect.h < WINDOW_HEIGHT) {
 			SDL_Rect topRect;
 			topRect.x = rect.x;
@@ -67,10 +68,27 @@ void Game::Render() {
 			bottomRect.h = WINDOW_HEIGHT - bottomRect.y;
 			SDL_RenderDrawRect(renderer, &bottomRect);
 		}
-		Uint8 r = foundColor / (256 * 256 * 256);
-		Uint8 g = foundColor / (256 * 256);
-		Uint8 b = foundColor / (256);
+
+		// Separate the two byte parts of the whole colour.
+		Uint8 r = (foundColor / (256 * 256 * 256));
+		Uint8 g = (foundColor / (256 * 256));
+		Uint8 b = (foundColor / (256));
 		Uint8 a = foundColor;
+
+		// Shading based on the angle.
+		r *= ((180.0 - angle) / 180);
+		g *= ((180.0 - angle) / 180);
+		b *= ((180.0 - angle) / 180);
+
+		// Fog based on draw distance.
+		/*
+		if (distance > 5) {
+			r *= (6.0 - distance);
+			g *= (6.0 - distance);
+			b *= (6.0 - distance);
+		}
+		*/
+
 		SDL_SetRenderDrawColor(renderer, r, g, b, a);
 		SDL_RenderDrawRect(renderer, &rect);
 	}
@@ -80,7 +98,7 @@ void Game::Render() {
 	SDL_RenderPresent(renderer);
 }
 
-SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance) {
+SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance, double &angle) {
 	distance = 0;
 	const double drawDistance = 6;
 
@@ -114,6 +132,29 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 	}
 
 	//distance = distance * cos(Math::DegToRad(((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())));
+
+	if (foundColor == COLOR_NONE) {
+		angle = 0;
+	} else {
+		double rayAngle = Math::RadToDeg(atan(delta.y / delta.x));
+		while (rayAngle < 0) {
+			rayAngle += 360;
+		}
+
+		if (0 < rayAngle && rayAngle < 180 && Math::Epsilon(pos.x)) {
+			angle = abs(90 - rayAngle);
+		} else if (90 < rayAngle && rayAngle < 270 && Math::Epsilon(pos.y)) {
+			angle = abs(180 - rayAngle);
+		} else if (180 < rayAngle && rayAngle < 360 && Math::Epsilon(pos.x)) {
+			angle = abs(270 - rayAngle);
+		} else if (Math::Epsilon(pos.y)) {
+			if (rayAngle > 270) {
+				angle = abs(360 - rayAngle);
+			} else {
+				angle = abs(-rayAngle);
+			}
+		}
+	}
 
 	double heightAngle = Math::RadToDeg(atan(1 / distance));
 	double screenHeightAngle = ((double)WINDOW_HEIGHT / WINDOW_WIDTH * player->GetFOV());

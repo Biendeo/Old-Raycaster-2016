@@ -21,7 +21,7 @@ class Game {
 	bool exiting;
 
 	void Render();
-	SDL_Rect SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance);
+	SDL_Rect SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance, double &angle);
 	Uint32 SpotPixel(int x, int y);
 	void HandleInput();
 };

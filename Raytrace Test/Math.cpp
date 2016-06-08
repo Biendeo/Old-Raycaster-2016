@@ -155,4 +155,16 @@ namespace Math {
 			return p;
 		}
 	}
+
+	bool Epsilon(double d) {
+		const double epsilon = 0.00002;
+		
+		int x = (int)d;
+
+		if (abs(d - x) <= epsilon) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
