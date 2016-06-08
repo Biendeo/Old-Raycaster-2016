@@ -10,7 +10,7 @@ class Game {
 	~Game();
 	int Run();
 
-	private:
+	protected:
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 

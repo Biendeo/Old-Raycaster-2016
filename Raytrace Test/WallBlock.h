@@ -9,7 +9,7 @@ class WallBlock {
 	int GetY();
 	Uint32 GetColor();
 
-	private:
+	protected:
 	// These are from the south-west of the blocks.
 	int x;
 	int y;

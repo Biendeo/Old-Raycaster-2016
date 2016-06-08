@@ -9,7 +9,7 @@ class Timer {
 	void DismissUpdate();
 	void ResetTimer();
 
-	private:
+	protected:
 	bool update;
 	std::chrono::microseconds updateTime;
 	std::chrono::steady_clock::time_point lastChecked;

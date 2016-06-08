@@ -18,7 +18,7 @@ class Player {
 	void TurnLeft();
 	void TurnRight();
 
-	private:
+	protected:
 	Math::Vector2 pos;
 	double rotation;
 	double fov;

@@ -12,7 +12,7 @@ class Map {
 	Uint32 GetBlockColor(Math::Vector2 v);
 	bool InWall(Math::Vector2 v);
 
-	private:
+	protected:
 	std::vector<WallBlock> walls;
 };
 
