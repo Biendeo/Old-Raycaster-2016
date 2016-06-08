@@ -1,0 +1,15 @@
+#pragma once
+
+#include <SDL.h>
+
+const Uint32 COLOR_NONE   = 0x00000000;
+const Uint32 COLOR_BLACK  = 0x000000FF;
+const Uint32 COLOR_WHITE  = 0xFFFFFFFF;
+const Uint32 COLOR_RED    = 0xFF0000FF;
+const Uint32 COLOR_GREEN  = 0x00FF00FF;
+const Uint32 COLOR_BLUE   = 0x0000FFFF;
+const Uint32 COLOR_YELLOW = 0xFFFF00FF;
+const Uint32 COLOR_ORANGE = 0xFF7F00FF;
+const Uint32 COLOR_PURPLE = 0xFF00FFFF;
+const Uint32 COLOR_CYAN   = 0x00FFFFFF;
+const Uint32 COLOR_GRAY   = 0x7F7F7FFF;

@@ -93,7 +93,7 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 	delta.x = (sin(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV()))));
 	delta.y = (cos(Math::DegToRad(player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV()))));
 
-	while (distance < drawDistance && foundColor == 0x00000000) {
+	while (distance < drawDistance && foundColor == COLOR_NONE) {
 		pos = Math::RayToNextGrid(pos, delta);
 
 		distance = (pos - player->GetPos()).Modulus();
@@ -118,10 +118,10 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 	double heightAngle = Math::RadToDeg(atan(1 / distance));
 	double screenHeightAngle = ((double)WINDOW_HEIGHT / WINDOW_WIDTH * player->GetFOV());
 	int screenY;
-	if (heightAngle >= screenHeightAngle || foundColor == 0x00000000) {
+	if (heightAngle >= screenHeightAngle || foundColor == COLOR_NONE) {
 		screenY = 0;
-		if (foundColor == 0x00000000) {
-			foundColor = 0x000000FF;
+		if (foundColor == COLOR_NONE) {
+			foundColor = COLOR_BLACK;
 		}
 	} else {
 		screenY = (int)((screenHeightAngle - heightAngle) / screenHeightAngle * WINDOW_HEIGHT / 2);
@@ -144,7 +144,7 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 	const double updateInterval = 0.2;
 	const double drawDistance = 6;
 
-	Uint32 foundColor = 0x00000000;
+	Uint32 foundColor = COLOR_NONE;
 
 	Math::Vector3 pos = Math::Vector3(player->GetX(), player->GetY(), 0);
 
@@ -154,15 +154,15 @@ Uint32 Game::SpotPixel(int pixelX, int pixelY) {
 	delta.y = cos(Math::DegToRad((player->GetRotation() + ((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())))) * updateInterval;
 	delta.z = ((double)(pixelY - (WINDOW_HEIGHT / 2)) / WINDOW_WIDTH * player->GetFOV()) * updateInterval;
 
-	while (trail < drawDistance && foundColor == 0x00000000 && pos.z > -1 && pos.z <= 1) {
+	while (trail < drawDistance && foundColor == COLOR_NONE && pos.z > -1 && pos.z <= 1) {
 		foundColor = map->GetBlockColor(Math::Vector2(pos.x, pos.y));
 
 		trail += updateInterval;
 		pos += delta;
 	}
 
-	if (foundColor == 0x00000000) {
-		foundColor = 0x000000FF;
+	if (foundColor == COLOR_NONE) {
+		foundColor = COLOR_BLACK;
 	}
 
 	return foundColor;

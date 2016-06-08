@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Color.h"
+
 const int WINDOW_X = 100;
 const int WINDOW_Y = 100;
 const int WINDOW_WIDTH = 640;
