@@ -18,7 +18,7 @@ Game::Game(SDL_Window *window, SDL_Renderer *renderer) {
 	this->renderer = renderer;
 	player = new Player();
 	map = new Map();
-	int refreshRate = 30;
+	int refreshRate = 60;
 	timer = new Timer(1000000 / refreshRate);
 	exiting = false;
 }
@@ -112,6 +112,8 @@ SDL_Rect Game::SpotVerticalRay(int pixelX, Uint32 &foundColor, double &distance)
 		foundColor = map->GetBlockColor(searchPos);
 
 	}
+
+	//distance = distance * cos(Math::DegToRad(((double)(pixelX - (WINDOW_WIDTH / 2)) / WINDOW_WIDTH * player->GetFOV())));
 
 	double heightAngle = Math::RadToDeg(atan(1 / distance));
 	double screenHeightAngle = ((double)WINDOW_HEIGHT / WINDOW_WIDTH * player->GetFOV());
@@ -219,4 +221,13 @@ void Game::HandleInput() {
 	for (int i = 0; i > mouseDeltaX; i -= mouseSensitivity) {
 		player->TurnLeft();
 	}
+	/*
+	for (int i = 0; i < mouseDeltaY; i += mouseSensitivity) {
+		player->MoveBack();
+	}
+
+	for (int i = 0; i > mouseDeltaY; i -= mouseSensitivity) {
+		player->MoveForward();
+	}
+	*/
 }
